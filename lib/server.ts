@@ -1,26 +1,46 @@
-import { env } from "cloudflare:workers";
-import { DEFAULT_CONTENT, contentSchema, type SiteContent } from "./content";
-import { getChatGPTUser } from "@/app/chatgpt-auth";
+import "server-only";
+import { contentSchema, type SiteContent } from "./content";
+import { createServerSupabase } from "./supabase/server";
 
-export function database(): D1Database { if(!env.DB) throw new Error("DATABASE_UNAVAILABLE");return env.DB; }
-export async function readContent():Promise<{content:SiteContent;revision:number}> {
-  const row=await database().prepare("SELECT payload, revision FROM site_content WHERE key = ?").bind("main").first<{payload:string;revision:number}>();
-  if(!row)return {content:DEFAULT_CONTENT,revision:0};
-  return {content:contentSchema.parse(JSON.parse(row.payload)),revision:row.revision};
+export function supabaseConfiguration() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+  if (!url || !key) throw new Error("SUPABASE_NOT_CONFIGURED");
+  return { url, key };
 }
+
+export async function edgeFetch(path: string, init: RequestInit = {}, token?: string) {
+  const { url, key } = supabaseConfiguration();
+  const headers = new Headers(init.headers);
+  headers.set("apikey", key);
+  // The Edge Function verifies this JWT and checks admins on each request.
+  if (token) headers.set("Authorization", "Bearer " + token);
+  return fetch(`${url}/functions/v1/spa-api/${path}`, {
+    ...init, headers, cache: "no-store", signal: AbortSignal.timeout(25000),
+  });
+}
+
+export async function sessionToken() {
+  const supabase = await createServerSupabase();
+  // getSession forwards the raw token only. Authorization always happens in
+  // spa-api using auth.getUser and the protected admins table.
+  const { data } = await supabase.auth.getSession();
+  return data.session?.access_token;
+}
+
+export async function readContent(): Promise<{ content: SiteContent; revision: number }> {
+  const response = await edgeFetch("content");
+  if (!response.ok) throw new Error("CONTENT_UNAVAILABLE");
+  const data = await response.json();
+  return { content: contentSchema.parse(data.content), revision: data.revision };
+}
+
 export async function authorizedAdmin() {
-  const user=await getChatGPTUser(); if(!user)return null;
-  const db=database();
-  const existing=await db.prepare("SELECT user_id FROM admins WHERE user_id = ?").bind(user.userId).first();
-  if(existing)return user;
-  // Bootstrap only the owner email verified from the native Sites access policy.
-  // Once bound, all subsequent authorization uses the stable Site-scoped user ID.
-  const count=await db.prepare("SELECT COUNT(*) AS n FROM admins").first<{n:number}>();
-  const email=(env.ADMIN_EMAIL ?? "").trim().toLowerCase();
-  if(count?.n===0 && email && user.email.toLowerCase()===email) {
-    await db.prepare("INSERT OR IGNORE INTO admins (user_id,email,created_at) SELECT ?,?,? WHERE NOT EXISTS (SELECT 1 FROM admins)").bind(user.userId,user.email,new Date().toISOString()).run();
-    const bound=await db.prepare("SELECT user_id FROM admins WHERE user_id = ?").bind(user.userId).first();
-    if(bound)return user;
-  }
-  return null;
+  const token = await sessionToken();
+  if (!token) return null;
+  const response = await edgeFetch("admin/me", {}, token);
+  if (response.status === 403) return null;
+  if (!response.ok) throw new Error("ADMIN_UNAVAILABLE");
+  const data = await response.json();
+  return data.user as { id: string; name: string };
 }

@@ -1,6 +1,5 @@
--- Draft migration for the independent Vercel + Supabase version.
--- Not applied to any hosted project. Existing Sites data is not changed.
-begin;
+-- Initial schema for the independent Vercel + Supabase version.
+-- The hosting platform applies this migration transactionally.
 
 create extension if not exists btree_gist with schema extensions;
 set local search_path = public, extensions;
@@ -114,5 +113,3 @@ end;
 $$;
 revoke all on function public.sg_save_content(jsonb, integer) from public, anon, authenticated;
 grant execute on function public.sg_save_content(jsonb, integer) to service_role;
-
-commit;

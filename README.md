@@ -1,34 +1,52 @@
 # Sirley Gómez · Silhouette & Harmony
 
-Sitio bilingüe de bienestar en Sterling, Virginia: tratamientos corporales, maderoterapia, reservas, panel administrativo y tarjetas de regalo.
+Sitio bilingüe de bienestar en Sterling, Virginia: maderoterapia, tratamientos corporales, reservas, panel administrativo y tarjetas de regalo.
 
-## Estado de este repositorio
+## Estado
 
-Código fuente completo de la primera versión construida con Sites/Cloudflare, publicado para continuar su adaptación a **Vercel + Supabase**.
+La aplicación ya está adaptada a **Next.js + Supabase**. PostgreSQL, el catálogo y la API `spa-api` están activos en Supabase. **La publicación en Vercel y la primera cuenta administradora siguen pendientes.** Consulta [la guía de configuración](MIGRATION_VERCEL_SUPABASE.md) y [las comprobaciones realizadas](VALIDATION.md).
 
-**Todavía no está adaptado para desplegar directamente en Vercel.** La versión actual usa Vinext, D1, R2 y el inicio de sesión de ChatGPT. Se conservarán el diseño, las imágenes y las traducciones al sustituir esas dependencias.
+## Funcionamiento
 
-- `app/`: página pública, panel, formularios, API y tarjetas digitales.
-- `public/images/`: imágenes de marca optimizadas.
-- `lib/content.ts`: catálogo inicial y textos en español e inglés.
-- `db/` y `drizzle/`: esquema de la versión original.
-- `supabase/migrations/`: borrador PostgreSQL para la migración.
-- `MIGRATION_VERCEL_SUPABASE.md`: pasos de adaptación pendientes.
-- `VALIDATION.md`: comprobaciones realizadas en la versión original.
+- Página y formularios en español e inglés; preferencia de idioma conservada.
+- Reservas por formulario y WhatsApp. Las solicitudes quedan pendientes de confirmación. PostgreSQL impide citas superpuestas, incluso con solicitudes simultáneas.
+- Agenda de lunes a sábado, 4:30–7:00 p. m., zona `America/New_York`, con cierres editables y adaptación al horario de verano.
+- Sesiones para hombres a US$100; paquetes de seis por US$600 y ocho por US$800.
+- Gift cards de cumpleaños y propuesta de Navidad: US$95, US$130 y US$160. La emisión requiere confirmar manualmente el pago; cada tarjeta tiene un código y un enlace único.
+- Panel `/admin` para agenda, catálogo, precios, textos bilingües, fotografías y horarios. Acceso con Supabase Auth y autorización explícita en `admins`.
+- La dirección exacta se comparte personalmente al confirmar la cita.
 
-## Contenido y precios
+## Arquitectura
 
-- Atención de lunes a sábado, 4:30–7:00 p. m., hora local de Sterling, con cita previa.
-- Tratamientos para hombres: US$100 por sesión; paquetes de 6 por US$600 y 8 por US$800.
-- Gift cards de cumpleaños y propuesta de Navidad en tres niveles: US$95, US$130 y US$160.
-- Las duraciones corporales no indicadas en el material tienen 60 minutos como configuración inicial editable.
+`app/` contiene la web y las rutas Next.js. Su API reenvía las operaciones a `supabase/functions/spa-api/`, donde se validan las entradas, se verifica cada acceso administrativo y se consulta PostgreSQL o Storage. Las claves privadas permanecen en el entorno de Supabase; Vercel necesita únicamente la URL y la clave publicable.
 
-## Configuración
+Las cuatro tablas tienen RLS activado y no conceden acceso directo a los roles `anon` o `authenticated`. Iniciar sesión o registrar una cuenta no concede permisos administrativos. Las fotografías nuevas se guardan en un bucket privado dedicado; solo sus rutas de imagen se sirven mediante la API. JPG, PNG y WebP, hasta 3 MB.
 
-Las credenciales y la base de datos se configuran por separado. Este repositorio no incluye claves, contraseñas, sesiones ni registros de clientes. Para la migración se necesitarán Supabase Auth, PostgreSQL y Storage, y las variables del proyecto de Vercel.
+`lib/content.ts` contiene el esquema de validación compartido y el catálogo inicial. Las ediciones posteriores se conservan en PostgreSQL, con control de revisión para evitar sobrescribir cambios de otro dispositivo.
 
-El borrador SQL no se ha aplicado a un proyecto Supabase. No se debe activar una agenda de producción hasta terminar la adaptación y verificar reservas, permisos y almacenamiento.
+## Desarrollo
+
+Requiere Node.js 24 y pnpm 11.25.0.
+
+```sh
+corepack pnpm install
+cp .env.example .env.local
+# Configurar los valores públicos de Supabase en .env.local.
+corepack pnpm dev
+```
+
+Para comprobar la aplicación:
+
+```sh
+corepack pnpm typecheck
+corepack pnpm lint
+corepack pnpm verify:catalog
+corepack pnpm verify:origin
+corepack pnpm build
+```
+
+No se incluyen contraseñas, claves privadas, sesiones ni datos de clientes en el repositorio. El SQL de `supabase/migrations/` registra la estructura aplicada; no contiene registros de clientes ni credenciales. La configuración de Vercel y la cuenta del panel se preparan por separado según la guía.
 
 ## Derechos
 
-La publicación del repositorio no concede una licencia general sobre la marca, fotografías o contenido comercial. Los avisos de licencia de las dependencias y archivos de terceros se conservan en sus archivos correspondientes.
+La publicación del repositorio no concede una licencia general sobre la marca, fotografías o contenido comercial. Los avisos de licencia de dependencias y archivos de terceros se conservan en sus archivos correspondientes.

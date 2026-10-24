@@ -52,3 +52,6 @@ yarn-error.log*
 *.sqlite3
 *.db
 /backups/
+
+# Public configuration template
+!.env.example

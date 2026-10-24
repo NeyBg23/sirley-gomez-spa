@@ -1,0 +1,7 @@
+project_id = "sirley-gomez-spa"
+
+[functions.spa-api]
+# Public booking routes are anonymous. Every admin route independently verifies
+# the Supabase Auth token and the protected admins table before accessing data.
+verify_jwt = false
+entrypoint = "./functions/spa-api/index.ts"
