@@ -7,3 +7,5 @@ allowBuilds:
   unrs-resolver: true
 enableGlobalVirtualStore: false
 packageImportMethod: auto
+publicHoistPattern:
+  - '*'

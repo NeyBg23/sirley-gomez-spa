@@ -46,6 +46,7 @@ yarn-error.log*
 
 # Additional local credentials and exported data
 /.vercel/
+/.netlify/
 *.key
 *.p12
 *.sqlite

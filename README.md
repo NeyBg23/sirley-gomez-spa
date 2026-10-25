@@ -4,7 +4,7 @@ Sitio bilingüe de bienestar en Sterling, Virginia: maderoterapia, tratamientos 
 
 ## Estado
 
-La aplicación ya está adaptada a **Next.js + Supabase**. PostgreSQL, el catálogo y la API `spa-api` están activos en Supabase. **La publicación en Vercel sigue pendiente.** La cuenta administradora ya está preparada; requiere confirmar el correo y elegir su contraseña para activar el acceso. Consulta [la guía de configuración](MIGRATION_VERCEL_SUPABASE.md) y [las comprobaciones realizadas](VALIDATION.md).
+La aplicación ya está adaptada a **Next.js + Supabase**. PostgreSQL, el catálogo y la API `spa-api` están activos en Supabase. **La publicación en Netlify sigue pendiente.** La cuenta administradora ya está preparada; requiere confirmar el correo y elegir su contraseña para activar el acceso. Consulta [la guía de configuración](DEPLOY_NETLIFY_SUPABASE.md) y [las comprobaciones realizadas](VALIDATION.md).
 
 ## Funcionamiento
 
@@ -18,7 +18,7 @@ La aplicación ya está adaptada a **Next.js + Supabase**. PostgreSQL, el catál
 
 ## Arquitectura
 
-`app/` contiene la web y las rutas Next.js. Su API reenvía las operaciones a `supabase/functions/spa-api/`, donde se validan las entradas, se verifica cada acceso administrativo y se consulta PostgreSQL o Storage. Las claves privadas permanecen en el entorno de Supabase; Vercel necesita únicamente la URL y la clave publicable.
+`app/` contiene la web y las rutas Next.js. Su API reenvía las operaciones a `supabase/functions/spa-api/`, donde se validan las entradas, se verifica cada acceso administrativo y se consulta PostgreSQL o Storage. Las claves privadas permanecen en el entorno de Supabase; Netlify necesita únicamente la URL y la clave publicable.
 
 Las cuatro tablas tienen RLS activado y no conceden acceso directo a los roles `anon` o `authenticated`. Iniciar sesión o registrar una cuenta no concede permisos administrativos. Las fotografías nuevas se guardan en un bucket privado dedicado; solo sus rutas de imagen se sirven mediante la API. JPG, PNG y WebP, hasta 3 MB.
 
@@ -45,7 +45,7 @@ corepack pnpm verify:origin
 corepack pnpm build
 ```
 
-No se incluyen contraseñas, claves privadas, sesiones ni datos de clientes en el repositorio. El SQL de `supabase/migrations/` registra la estructura aplicada; no contiene registros de clientes ni credenciales. La configuración de Vercel y la cuenta del panel se preparan por separado según la guía.
+No se incluyen contraseñas, claves privadas, sesiones ni datos de clientes en el repositorio. El SQL de `supabase/migrations/` registra la estructura aplicada; no contiene registros de clientes ni credenciales. La configuración de Netlify y la cuenta del panel se preparan por separado según la guía.
 
 ## Derechos
 

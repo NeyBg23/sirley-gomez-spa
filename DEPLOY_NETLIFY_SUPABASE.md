@@ -1,4 +1,4 @@
-# Configuración de Vercel y Supabase
+# Configuración de Netlify Free y Supabase
 
 ## Supabase configurado
 
@@ -11,7 +11,7 @@ Proyecto confirmado: `NeyBg’s Project`, referencia `kckdtjbplkajmzjqazfn`, reg
 - Función `spa-api` desplegada. Incluye rutas públicas de catálogo, disponibilidad, solicitudes y tarjetas emitidas; cada ruta de administración verifica el JWT con Supabase Auth y el registro de `admins`.
 - Bucket `spa-media`: privado; JPG, PNG y WebP; máximo 3 MB.
 
-La función usa las claves del entorno de Supabase, con preferencia por `SUPABASE_SECRET_KEYS` y compatibilidad con la variable integrada de servicio. No se necesita copiar claves privadas a Vercel ni al repositorio. La verificación JWT del gateway está desactivada porque hay reservas anónimas; las rutas administrativas hacen su propia autenticación y autorización en el código.
+La función usa las claves del entorno de Supabase, con preferencia por `SUPABASE_SECRET_KEYS` y compatibilidad con la variable integrada de servicio. No se necesita copiar claves privadas a Netlify ni al repositorio. La verificación JWT del gateway está desactivada porque hay reservas anónimas; las rutas administrativas hacen su propia autenticación y autorización en el código.
 
 ## Primera cuenta del panel
 
@@ -23,11 +23,15 @@ La cuenta solicitada fue creada el 25 de octubre de 2026 y vinculada a `public.a
 
 El aprovisionamiento se hizo con la API administrativa de Auth, sin modificar directamente `auth.users`; el mecanismo temporal fue retirado al terminar. No existe alta pública de administradores ni un permiso automático para la primera persona que inicie sesión. Una cuenta autenticada sin registro en `admins` recibe acceso denegado.
 
-## Publicación en Vercel
+## Publicación en Netlify Free
 
-El repositorio está preparado para importarse como Next.js desde la raíz. La cuenta conectada estaba en Hobby al comprobarla el 24 de octubre de 2026. Para el uso comercial del spa se requiere Pro u otro plan que permita ese uso. No se ha contratado ni activado un plan de pago.
+El repositorio está preparado para importarse como Next.js desde la raíz. Se eligió Netlify Free para alojar el sitio comercial, conservando Supabase para la base de datos, Auth y Storage.
 
-Referencia oficial: [Vercel Hobby y uso no comercial](https://vercel.com/docs/plans/hobby).
+El plan Free de Netlify cuesta US$0 y tiene 300 créditos al mes con límite fijo y sin recarga automática. La operación debe mantenerse dentro de ese cupo; no es capacidad ilimitada. No se necesita contratar un plan de pago para publicar esta versión dentro del cupo gratuito.
+
+Referencias oficiales: [uso comercial en Free](https://www.netlify.com/guides/netlify-vs-vercel/) y [límites y créditos de Free](https://docs.netlify.com/manage/accounts-and-billing/billing/billing-for-credit-based-plans/credit-based-pricing-plans/).
+
+La configuración `netlify.toml` define Node.js 24, compilación `pnpm build` y salida `.next`. `pnpm-workspace.yaml` mantiene `publicHoistPattern` con `*`, equivalente a la elevación pública de dependencias que requiere Netlify y compatible con la configuración de pnpm 11. El adaptador OpenNext de Netlify se detecta automáticamente, sin fijar manualmente su versión. No usar una salida estática: agenda, panel y tarjetas requieren ejecución del servidor.
 
 Variables de producción:
 
@@ -37,9 +41,11 @@ Variables de producción:
 | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Clave publicable activa de ese proyecto |
 | `NEXT_PUBLIC_SITE_URL` | Origen final de la web, con HTTPS |
 
-Configurar Node.js 24. La instalación usa el lockfile pnpm; compilación `pnpm build`. Vercel detecta la salida de Next.js automáticamente. No usar una salida estática: agenda, panel y tarjetas requieren ejecución del servidor.
+Estas variables son configuración pública. No incluir claves de servicio de Supabase en Netlify ni en el repositorio. En Supabase Auth se debe establecer el origen definitivo y autorizar exactamente `/auth/callback` como retorno. Verificar la entrega del correo antes de activar la cuenta administradora.
 
-Para pruebas de ramas, usar un Supabase separado y variables de Preview propias, evitando escrituras en la agenda de producción. La URL final y el dominio se configuran al publicar. La versión anterior alojada en Sites conserva su configuración independiente.
+Para pruebas de ramas, usar un Supabase separado y variables de Preview propias, evitando escrituras en la agenda de producción. La versión anterior alojada en Sites conserva su configuración independiente.
+
+Un despliegue anónimo de Netlify, si se utiliza para validar, dura una hora y debe reclamarse con una cuenta de Netlify para conservarlo. Su enlace de reclamación y las credenciales locales nunca se publican en Git. Un despliegue de prueba no se presenta como permanente hasta vincularlo a la cuenta propietaria.
 
 ## Actualizaciones posteriores
 
