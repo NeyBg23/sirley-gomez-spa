@@ -4,7 +4,9 @@ Sitio bilingüe de bienestar en Sterling, Virginia: maderoterapia, tratamientos 
 
 ## Estado
 
-La aplicación ya está adaptada a **Next.js + Supabase**. PostgreSQL, el catálogo y la API `spa-api` están activos en Supabase. **La publicación en Netlify sigue pendiente.** La cuenta administradora ya está preparada; requiere confirmar el correo y elegir su contraseña para activar el acceso. Consulta [la guía de configuración](DEPLOY_NETLIFY_SUPABASE.md) y [las comprobaciones realizadas](VALIDATION.md).
+La web está publicada en **[sirley-gomez-spa.netlify.app](https://sirley-gomez-spa.netlify.app)** con Next.js en Netlify Free y PostgreSQL, Auth, Storage y la API `spa-api` en Supabase. Las reservas y solicitudes de regalo se verificaron desde la web hasta la base de datos. La cuenta administradora está preparada; la configuración del correo y su activación por la titular siguen pendientes. Consulta [la guía de configuración](DEPLOY_NETLIFY_SUPABASE.md) y [las comprobaciones realizadas](VALIDATION.md).
+
+La publicación se hace con una compilación alojada del código fuente; todavía no hay despliegue automático al subir cambios a GitHub.
 
 ## Funcionamiento
 

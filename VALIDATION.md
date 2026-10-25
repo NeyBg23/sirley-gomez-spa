@@ -1,4 +1,4 @@
-# Validación · 24 de octubre de 2026
+# Validación · 25 de octubre de 2026
 
 ## Compilación y comprobaciones locales
 
@@ -33,7 +33,7 @@ Las solicitudes artificiales se identifican como QA y se eliminan tras las compr
 
 En la verificación inicial, antes de crear la cuenta, el asesor de seguridad no encontró advertencias ni errores. Informó cuatro tablas con [RLS sin políticas](https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy): es intencional, ya que todos los permisos directos de cliente están revocados y el acceso se hace en la API. El asesor de rendimiento informó un [índice aún sin uso](https://supabase.com/docs/guides/database/database-linter?lint=0005_unused_index), esperado en una agenda recién creada; se conserva para consultas de agenda.
 
-La cuenta administradora se creó el 25 de octubre de 2026 y se vinculó al panel; está pendiente de confirmar su correo y elegir su contraseña personal. Falta el despliegue en Netlify. Por eso, aún no se han verificado en ese destino el inicio y renovación de sesión con el propietario, las operaciones del panel, la carga de fotos ni la emisión y uso de tarjetas. El navegador remoto no pudo acceder al servidor local; las comprobaciones locales del HTML y la API se hicieron por HTTP. La comprobación visual del despliegue final queda pendiente.
+La cuenta administradora se creó el 25 de octubre de 2026 y se vinculó al panel; está pendiente de confirmar su correo y elegir su contraseña personal. Aún no se han verificado el inicio y renovación de sesión con la titular, las operaciones del panel, la carga de fotos ni la emisión y uso de tarjetas. Esas pruebas requieren completar la configuración de retorno y entrega de correo en Supabase Auth y la activación personal. El dashboard de Supabase requiere iniciar sesión en el navegador para realizar esos ajustes; el conector disponible no los expone.
 
 ## Preparación de la cuenta · 25 de octubre de 2026
 
@@ -46,16 +46,28 @@ El asesor de seguridad posterior a la creación de la cuenta informa que está d
 
 Prueba HTTP local de activación completada: formulario 200; pantalla de contraseña sin sesión redirige al acceso (307); cambio de contraseña sin sesión 403; correo inválido 400; solicitud cross-site 403; retorno sin credenciales 303 a una ruta interna. Un destino externo en la consulta no produce redirección externa. Estas pruebas no enviaron correos ni cambiaron contraseñas. TypeScript, ESLint, la prueba de origen y la compilación Next.js volvieron a pasar.
 
-## Preparación de Netlify · 25 de octubre de 2026
+## Producción en Netlify Free
 
-Se añadió `netlify.toml` para Node.js 24, salida `.next`, compilación pnpm y la elevación de dependencias indicada por Netlify para Next.js mediante `publicHoistPattern` en la configuración pnpm. El adaptador de Next.js se detecta automáticamente. El estado de Netlify CLI indica que aún no hay una cuenta conectada ni un proyecto vinculado. Las carpetas locales de Netlify y los archivos de entorno están excluidos de Git.
+Publicada y verificada en `https://sirley-gomez-spa.netlify.app`, proyecto del equipo `NeyBg23` en Free: 300 créditos al mes, sin recarga automática. No se activaron planes de pago. La versión anterior de Sites conserva su configuración independiente.
 
-La compilación local con Netlify CLI 27.13.0 detectó Next.js Runtime 5.16.3. La compilación Next.js y el empaquetado de la función SSR principal pasaron. El empaquetado Edge no terminó porque se canceló una autorización de red del entorno. Por tanto, no se declara validado el paquete completo de Netlify ni publicado el sitio. La compilación alojada de Netlify y su verificación quedan pendientes de conectar la cuenta.
+- Código de la versión publicada: commit `bdd78be0f90bd26c74f3a20e751834e52f64ef07`.
+- Compilación alojada `6ade7cc0e66492c204515e78`; despliegue `6ade7cc0e66492c204515e7a`, estado `ready`, publicado el 25 de octubre de 2026 a las 22:04:36 UTC.
+- Se desplegaron la función SSR de Next.js, la función Edge de renovación de sesión y las reglas de redirección. El adaptador `@netlify/plugin-nextjs` 5.16.2 está declarado explícitamente y fijado en el lockfile. La política de antigüedad mínima de dependencias se conserva.
+- Las tres variables públicas de Supabase y del origen final están guardadas para producción y se verificaron por lectura de la API. Usan todos los ámbitos predeterminados del plan Free; los ámbitos individuales requieren Pro. No hay claves de servicio en Netlify.
+- El archivo fuente de compilación excluye archivos de entorno, sesiones, metadatos locales y dependencias instaladas. Este despliegue todavía no está vinculado a una integración automática con GitHub.
 
-La instalación con el lockfile y `publicHoistPattern: ['*']` pasó; pnpm confirmó esa configuración. Tras el ajuste volvieron a pasar TypeScript y las comprobaciones de catálogo y origen. Se preparó la autorización oficial de Netlify CLI; no hay proyecto desplegado mientras esa autorización siga pendiente.
+La primera compilación desde ZIP se corrigió para incluir el adaptador de Next.js y generar funciones, en lugar de servir `.next` como archivos estáticos. También se verificó el guardado real de las variables: los comandos iniciales de configuración no las habían creado. La versión final usa la configuración comprobada mediante la API oficial.
 
-## Despliegue alojado en Netlify
+## Comprobaciones de la web publicada
 
-Cuenta conectada y equipo NeyBg23 verificado en Free: 300 créditos al mes, sin recarga automática. Se creó el proyecto `sirley-gomez-spa` y se configuraron las tres variables públicas únicamente para producción, en los ámbitos de compilación y funciones. La primera compilación alojada terminó, pero produjo archivos estáticos de Next.js sin funciones ni redirecciones y la raíz devolvió 404. Se añadió explícitamente `@netlify/plugin-nextjs` sin fijar su versión para corregir ese empaquetado. La URL no se presenta como operativa hasta completar las comprobaciones HTTP.
+- Inicio en español e inglés y catálogo: HTTP 200; siete tratamientos, seis regalos y sesión individual masculina de US$100.
+- Formulario de acceso y activación: HTTP 200. Datos administrativos sin sesión: HTTP 403 y `no-store`.
+- Dos solicitudes simultáneas al mismo horario desde la API de Netlify: HTTP 201 y 409; el horario ocupado dejó de estar disponible.
+- PostgreSQL confirmó que la cita creada conservó el precio de US$100 pese al precio artificial enviado por el cliente.
+- Solicitud de regalo navideño: HTTP 201, estado `requested`, precio US$95 en la respuesta y en PostgreSQL.
+- Solicitud de cita cross-site: HTTP 403. Correo inválido de recuperación: HTTP 400, sin envío de mensajes.
+- Pantalla de contraseña sin sesión: redirección 307 al acceso. Retorno de autenticación inválido: redirección interna 303, sin aceptar un destino externo.
+- Se eliminaron únicamente la cita y el regalo sintéticos de esta prueba mediante sus referencias exactas y se confirmó que no quedan registros con esas referencias.
+- Comprobación visual en navegador de la página de producción en español: logo, fotografías, tipografía, colores cálidos, precios, horarios y enlaces visibles. La página inglesa también se comprobó en navegador, incluida la actualización del idioma del documento a `en` tras la carga. La entrega de correo y las operaciones autenticadas del panel siguen pendientes.
 
-El adaptador declarado para esta compilación es `@netlify/plugin-nextjs` 5.16.2, publicado el 5 de octubre de 2026 y compatible con la política de antigüedad mínima del repositorio. El intento de instalar 5.16.3 se detuvo por esa política; no se modificó la protección.
+Tras añadir el adaptador, TypeScript volvió a pasar. Los cambios posteriores a esta publicación solo actualizan documentación.

@@ -17,7 +17,7 @@ La función usa las claves del entorno de Supabase, con preferencia por `SUPABAS
 
 La cuenta solicitada fue creada el 25 de octubre de 2026 y vinculada a `public.admins`. El correo se conserva en Supabase y no se publica en este repositorio. Sigue pendiente que su titular confirme el correo y configure su contraseña personal. No se ha enviado un correo de activación.
 
-1. Al publicar, configurar en Supabase Auth la URL final del sitio y permitir exactamente su ruta `/auth/callback` como redirección. Revisar el remitente SMTP y la entrega autorizada a la cuenta del spa.
+1. En Supabase Auth, establecer `https://sirley-gomez-spa.netlify.app` como Site URL y permitir exactamente `https://sirley-gomez-spa.netlify.app/auth/callback` como redirección. Este ajuste y la revisión del remitente SMTP siguen pendientes de acceso al dashboard. Verificar que el remitente pueda entregar mensajes a la cuenta del spa.
 2. La titular abre `/admin/access`, solicita su enlace y lo sigue en el mismo navegador. La ruta de retorno valida la sesión y la autorización antes de mostrar `/admin/password`, donde elige su contraseña de forma privada.
 3. Probar inicio de sesión, cierre de sesión, recuperación y renovación de sesión desde `/admin`. El acceso administrativo siempre exige un correo confirmado.
 
@@ -25,7 +25,7 @@ El aprovisionamiento se hizo con la API administrativa de Auth, sin modificar di
 
 ## Publicación en Netlify Free
 
-El repositorio está preparado para importarse como Next.js desde la raíz. Se eligió Netlify Free para alojar el sitio comercial, conservando Supabase para la base de datos, Auth y Storage.
+El proyecto `sirley-gomez-spa` pertenece al equipo `NeyBg23` y usa Netlify Free, con Supabase para la base de datos, Auth y Storage. Su dirección de producción es `https://sirley-gomez-spa.netlify.app`. El proyecto de Netlify permite acceso público; los datos y operaciones de administración siguen protegidos por la aplicación.
 
 El plan Free de Netlify cuesta US$0 y tiene 300 créditos al mes con límite fijo y sin recarga automática. La operación debe mantenerse dentro de ese cupo; no es capacidad ilimitada. No se necesita contratar un plan de pago para publicar esta versión dentro del cupo gratuito.
 
@@ -41,11 +41,13 @@ Variables de producción:
 | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Clave publicable activa de ese proyecto |
 | `NEXT_PUBLIC_SITE_URL` | Origen final de la web, con HTTPS |
 
-Estas variables son configuración pública. No incluir claves de servicio de Supabase en Netlify ni en el repositorio. En Supabase Auth se debe establecer el origen definitivo y autorizar exactamente `/auth/callback` como retorno. Verificar la entrega del correo antes de activar la cuenta administradora.
+Estas tres variables están guardadas en el proyecto de Netlify para el contexto de producción y se verificaron mediante lectura posterior. Se usan todos los ámbitos predeterminados del plan Free; la selección de ámbitos individuales requiere Pro. Son configuración pública. No incluir claves de servicio de Supabase en Netlify ni en el repositorio. En Supabase Auth se debe establecer el origen definitivo y autorizar exactamente `/auth/callback` como retorno. Verificar la entrega del correo antes de activar la cuenta administradora.
 
 Para pruebas de ramas, usar un Supabase separado y variables de Preview propias, evitando escrituras en la agenda de producción. La versión anterior alojada en Sites conserva su configuración independiente.
 
-Un despliegue anónimo de Netlify, si se utiliza para validar, dura una hora y debe reclamarse con una cuenta de Netlify para conservarlo. Su enlace de reclamación y las credenciales locales nunca se publican en Git. Un despliegue de prueba no se presenta como permanente hasta vincularlo a la cuenta propietaria.
+La publicación utiliza la API oficial de compilación alojada a partir de un ZIP del código fuente del repositorio. El archivo incluye `netlify.toml`, el lockfile y los recursos públicos; excluye archivos de entorno, sesiones, dependencias instaladas y metadatos locales. Netlify instala las dependencias y genera las funciones de Next.js en su infraestructura. La autorización de Netlify CLI se conserva fuera del repositorio.
+
+Este proyecto todavía no tiene despliegue automático conectado a GitHub: subir un commit por sí solo no publica la web. Las actualizaciones se publican mediante una nueva compilación del archivo fuente revisado. Se puede conectar posteriormente la integración oficial de GitHub si se autoriza.
 
 ## Actualizaciones posteriores
 
