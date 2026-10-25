@@ -53,3 +53,9 @@ Se añadió `netlify.toml` para Node.js 24, salida `.next`, compilación pnpm y 
 La compilación local con Netlify CLI 27.13.0 detectó Next.js Runtime 5.16.3. La compilación Next.js y el empaquetado de la función SSR principal pasaron. El empaquetado Edge no terminó porque se canceló una autorización de red del entorno. Por tanto, no se declara validado el paquete completo de Netlify ni publicado el sitio. La compilación alojada de Netlify y su verificación quedan pendientes de conectar la cuenta.
 
 La instalación con el lockfile y `publicHoistPattern: ['*']` pasó; pnpm confirmó esa configuración. Tras el ajuste volvieron a pasar TypeScript y las comprobaciones de catálogo y origen. Se preparó la autorización oficial de Netlify CLI; no hay proyecto desplegado mientras esa autorización siga pendiente.
+
+## Despliegue alojado en Netlify
+
+Cuenta conectada y equipo NeyBg23 verificado en Free: 300 créditos al mes, sin recarga automática. Se creó el proyecto `sirley-gomez-spa` y se configuraron las tres variables públicas únicamente para producción, en los ámbitos de compilación y funciones. La primera compilación alojada terminó, pero produjo archivos estáticos de Next.js sin funciones ni redirecciones y la raíz devolvió 404. Se añadió explícitamente `@netlify/plugin-nextjs` sin fijar su versión para corregir ese empaquetado. La URL no se presenta como operativa hasta completar las comprobaciones HTTP.
+
+El adaptador declarado para esta compilación es `@netlify/plugin-nextjs` 5.16.2, publicado el 5 de octubre de 2026 y compatible con la política de antigüedad mínima del repositorio. El intento de instalar 5.16.3 se detuvo por esa política; no se modificó la protección.

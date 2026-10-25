@@ -31,7 +31,7 @@ El plan Free de Netlify cuesta US$0 y tiene 300 créditos al mes con límite fij
 
 Referencias oficiales: [uso comercial en Free](https://www.netlify.com/guides/netlify-vs-vercel/) y [límites y créditos de Free](https://docs.netlify.com/manage/accounts-and-billing/billing/billing-for-credit-based-plans/credit-based-pricing-plans/).
 
-La configuración `netlify.toml` define Node.js 24, compilación `pnpm build` y salida `.next`. `pnpm-workspace.yaml` mantiene `publicHoistPattern` con `*`, equivalente a la elevación pública de dependencias que requiere Netlify y compatible con la configuración de pnpm 11. El adaptador OpenNext de Netlify se detecta automáticamente, sin fijar manualmente su versión. No usar una salida estática: agenda, panel y tarjetas requieren ejecución del servidor.
+La configuración `netlify.toml` define Node.js 24, compilación `pnpm build` y salida `.next`. `pnpm-workspace.yaml` mantiene `publicHoistPattern` con `*`, equivalente a la elevación pública de dependencias que requiere Netlify y compatible con la configuración de pnpm 11. `netlify.toml` habilita explícitamente `@netlify/plugin-nextjs` para que los despliegues desde archivos fuente generen las funciones SSR y las rutas. El adaptador está declarado en las dependencias de desarrollo y en el lockfile para que la compilación desde un archivo fuente incluya su instalación. Se actualiza junto con las comprobaciones de despliegue. No usar una salida estática: agenda, panel y tarjetas requieren ejecución del servidor.
 
 Variables de producción:
 
