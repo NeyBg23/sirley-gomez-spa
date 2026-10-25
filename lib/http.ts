@@ -10,3 +10,9 @@ export function sameOrigin(request: Request) {
     return source.host === host && source.protocol === target.protocol;
   } catch { return false; }
 }
+
+export function siteOrigin(request: Request) {
+  if (process.env.NEXT_PUBLIC_SITE_URL) return new URL(process.env.NEXT_PUBLIC_SITE_URL).origin;
+  const url = new URL(request.url);
+  return `${url.protocol}//${request.headers.get("host") ?? url.host}`;
+}

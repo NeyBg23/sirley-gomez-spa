@@ -1,6 +1,7 @@
 "use client";
 import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function AdminLogin() {
   const [busy, setBusy] = useState(false), [error, setError] = useState("");
@@ -28,5 +29,6 @@ export default function AdminLogin() {
     <label>Contraseña<input name="password" type="password" autoComplete="current-password" required maxLength={1024} /></label>
     {error && <p className="form-error" role="alert">{error}</p>}
     <button className="button" disabled={busy}>{busy ? "Entrando…" : "Entrar a mi panel"}<span>↗</span></button>
+    <Link className="text-link" href="/admin/access">Activar mi acceso o recuperar mi contraseña ↗</Link>
   </form>;
 }

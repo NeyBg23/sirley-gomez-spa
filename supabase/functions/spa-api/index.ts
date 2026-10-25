@@ -75,7 +75,7 @@ async function admin(request: Request) {
   const header = request.headers.get("authorization");
   if (!header?.startsWith("Bearer ")) throw new HttpError("UNAUTHORIZED", 403);
   const { data: { user }, error } = await db.auth.getUser(header.slice(7));
-  if (error || !user) throw new HttpError("UNAUTHORIZED", 403);
+  if (error || !user || !user.email_confirmed_at) throw new HttpError("UNAUTHORIZED", 403);
   const result = await db.from("admins").select("user_id").eq("user_id", user.id).maybeSingle();
   if (result.error) throw result.error;
   if (!result.data) throw new HttpError("UNAUTHORIZED", 403);

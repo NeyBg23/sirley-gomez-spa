@@ -15,13 +15,13 @@ La función usa las claves del entorno de Supabase, con preferencia por `SUPABAS
 
 ## Primera cuenta del panel
 
-Falta definir el correo de la persona que administrará el spa. Aún no hay usuarios ni administradores creados.
+La cuenta solicitada fue creada el 25 de octubre de 2026 y vinculada a `public.admins`. El correo se conserva en Supabase y no se publica en este repositorio. Sigue pendiente que su titular confirme el correo y configure su contraseña personal. No se ha enviado un correo de activación.
 
-1. Crear la cuenta en Supabase Auth mediante el flujo autorizado de alta y confirmación de correo. La persona elige su contraseña de forma privada.
-2. Tras confirmar su identidad y correo, vincular exclusivamente esa cuenta a `public.admins`. El identificador debe obtenerse de `auth.users`, sin reutilizar identificadores de otros servicios.
-3. Probar inicio de sesión, cierre de sesión y renovación de sesión desde `/admin`.
+1. Al publicar, configurar en Supabase Auth la URL final del sitio y permitir exactamente su ruta `/auth/callback` como redirección. Revisar el remitente SMTP y la entrega autorizada a la cuenta del spa.
+2. La titular abre `/admin/access`, solicita su enlace y lo sigue en el mismo navegador. La ruta de retorno valida la sesión y la autorización antes de mostrar `/admin/password`, donde elige su contraseña de forma privada.
+3. Probar inicio de sesión, cierre de sesión, recuperación y renovación de sesión desde `/admin`. El acceso administrativo siempre exige un correo confirmado.
 
-No existe alta pública de administradores ni un permiso automático para la primera persona que inicie sesión. Una cuenta autenticada sin registro en `admins` recibe acceso denegado.
+El aprovisionamiento se hizo con la API administrativa de Auth, sin modificar directamente `auth.users`; el mecanismo temporal fue retirado al terminar. No existe alta pública de administradores ni un permiso automático para la primera persona que inicie sesión. Una cuenta autenticada sin registro en `admins` recibe acceso denegado.
 
 ## Publicación en Vercel
 

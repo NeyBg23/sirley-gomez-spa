@@ -4,7 +4,7 @@ Sitio bilingüe de bienestar en Sterling, Virginia: maderoterapia, tratamientos 
 
 ## Estado
 
-La aplicación ya está adaptada a **Next.js + Supabase**. PostgreSQL, el catálogo y la API `spa-api` están activos en Supabase. **La publicación en Vercel y la primera cuenta administradora siguen pendientes.** Consulta [la guía de configuración](MIGRATION_VERCEL_SUPABASE.md) y [las comprobaciones realizadas](VALIDATION.md).
+La aplicación ya está adaptada a **Next.js + Supabase**. PostgreSQL, el catálogo y la API `spa-api` están activos en Supabase. **La publicación en Vercel sigue pendiente.** La cuenta administradora ya está preparada; requiere confirmar el correo y elegir su contraseña para activar el acceso. Consulta [la guía de configuración](MIGRATION_VERCEL_SUPABASE.md) y [las comprobaciones realizadas](VALIDATION.md).
 
 ## Funcionamiento
 
@@ -13,7 +13,7 @@ La aplicación ya está adaptada a **Next.js + Supabase**. PostgreSQL, el catál
 - Agenda de lunes a sábado, 4:30–7:00 p. m., zona `America/New_York`, con cierres editables y adaptación al horario de verano.
 - Sesiones para hombres a US$100; paquetes de seis por US$600 y ocho por US$800.
 - Gift cards de cumpleaños y propuesta de Navidad: US$95, US$130 y US$160. La emisión requiere confirmar manualmente el pago; cada tarjeta tiene un código y un enlace único.
-- Panel `/admin` para agenda, catálogo, precios, textos bilingües, fotografías y horarios. Acceso con Supabase Auth y autorización explícita en `admins`.
+- Panel `/admin` para agenda, catálogo, precios, textos bilingües, fotografías y horarios. Acceso con Supabase Auth, correo verificado y autorización explícita en `admins`. Activación y recuperación de contraseña mediante enlace de correo.
 - La dirección exacta se comparte personalmente al confirmar la cita.
 
 ## Arquitectura
