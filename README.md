@@ -4,7 +4,7 @@ Sitio bilingüe de bienestar en Sterling, Virginia: maderoterapia, tratamientos 
 
 ## Estado
 
-La web está publicada en **[sirley-gomez-spa.netlify.app](https://sirley-gomez-spa.netlify.app)** con Next.js en Netlify Free y PostgreSQL, Auth, Storage y la API `spa-api` en Supabase. Las reservas y solicitudes de regalo se verificaron desde la web hasta la base de datos. La cuenta administradora, las URL de autenticación y el remitente SMTP de Gmail están configurados. Quedan pendientes el envío autorizado de la invitación, su recepción y la activación por la titular. Consulta [la guía de configuración](DEPLOY_NETLIFY_SUPABASE.md) y [las comprobaciones realizadas](VALIDATION.md).
+La web está publicada en **[sirley-gomez-spa.netlify.app](https://sirley-gomez-spa.netlify.app)** con Next.js en Netlify Free y PostgreSQL, Auth, Storage y la API `spa-api` en Supabase. Las reservas y solicitudes de regalo se verificaron desde la web hasta la base de datos. La cuenta administradora y las URL de autenticación están configuradas. Las invitaciones autorizadas se probaron, pero Gmail rechaza la credencial SMTP con el error 535; la cuenta sigue pendiente de activación. Se preparó una [herramienta privada para asignar la contraseña a la cuenta existente](ADMIN_ACCESS_SETUP.md), aún sin ejecutar sobre la cuenta real. Consulta [la guía de configuración](DEPLOY_NETLIFY_SUPABASE.md) y [las comprobaciones realizadas](VALIDATION.md).
 
 La publicación se hace con una compilación alojada del código fuente; todavía no hay despliegue automático al subir cambios a GitHub.
 

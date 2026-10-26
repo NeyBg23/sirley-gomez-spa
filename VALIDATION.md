@@ -33,7 +33,7 @@ Las solicitudes artificiales se identifican como QA y se eliminan tras las compr
 
 En la verificación inicial, antes de crear la cuenta, el asesor de seguridad no encontró advertencias ni errores. Informó cuatro tablas con [RLS sin políticas](https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy): es intencional, ya que todos los permisos directos de cliente están revocados y el acceso se hace en la API. El asesor de rendimiento informó un [índice aún sin uso](https://supabase.com/docs/guides/database/database-linter?lint=0005_unused_index), esperado en una agenda recién creada; se conserva para consultas de agenda.
 
-La cuenta administradora se creó el 25 de octubre de 2026 y se vinculó al panel; está pendiente de confirmar su correo y elegir su contraseña personal. Aún no se han verificado el inicio y renovación de sesión con la titular, las operaciones del panel, la carga de fotos ni la emisión y uso de tarjetas. Las URL de retorno y el SMTP se configuraron el 26 de octubre; faltan el envío autorizado, la recepción y la activación personal. La configuración de URL y SMTP se revisó en el dashboard, ya que el conector disponible no expone esos ajustes.
+La cuenta administradora se creó el 25 de octubre de 2026 y se vinculó al panel; está pendiente de activación y contraseña. Aún no se han verificado el inicio y renovación de sesión con la titular, las operaciones del panel, la carga de fotos ni la emisión y uso de tarjetas. Las URL de retorno y el SMTP se configuraron el 26 de octubre; los intentos de invitación autorizados fallaron con un rechazo SMTP 535 de Gmail. La configuración se revisó en el dashboard y el error se verificó en Auth Logs mediante el conector. La alternativa de asignación manual de contraseña está preparada, sin ejecutarse sobre la cuenta real.
 
 ## Preparación de la cuenta · 25 de octubre de 2026
 
@@ -70,7 +70,7 @@ La primera compilación desde ZIP se corrigió para incluir el adaptador de Next
 - Se eliminaron únicamente la cita y el regalo sintéticos de esta prueba mediante sus referencias exactas y se confirmó que no quedan registros con esas referencias.
 - Comprobación visual en navegador de la página de producción en español: logo, fotografías, tipografía, colores cálidos, precios, horarios y enlaces visibles. La página inglesa también se comprobó en navegador, incluida la actualización del idioma del documento a `en` tras la carga. La entrega de correo y las operaciones autenticadas del panel siguen pendientes.
 
-Tras añadir el adaptador, TypeScript volvió a pasar. Los cambios posteriores a esta publicación solo actualizan documentación.
+Tras añadir el adaptador, TypeScript volvió a pasar. Los cambios posteriores a esta publicación actualizan documentación, fuentes de plantillas ya guardadas en Supabase y una herramienta local del operador; no cambian la aplicación desplegada en Netlify.
 
 ## Configuración de acceso · 26 de octubre de 2026
 
@@ -81,6 +81,16 @@ Tras añadir el adaptador, TypeScript volvió a pasar. Los cambios posteriores a
 - Consulta de verificación: la cuenta del panel existe y conserva su asignación de administrador; correo aún sin confirmar y sin inicios de sesión previos.
 - No se enviaron mensajes, no se eligió una contraseña para la titular y no se contrataron servicios de pago.
 
-La cuenta de envío y la cuenta administradora del panel son independientes. La comprobación del guardado debe esperar a que termine de cargarse la configuración del dashboard: el estado inicial del formulario puede mostrar temporalmente el SMTP desactivado. No se leyó ninguna contraseña ni se inspeccionó su contenido. El envío y la recepción todavía no se han probado. El aviso visible de Supabase sobre la entrega de correo personal con Gmail se conserva como limitación.
+La cuenta de envío y la cuenta administradora del panel son independientes. La comprobación del guardado debe esperar a que termine de cargarse la configuración del dashboard: el estado inicial del formulario puede mostrar temporalmente el SMTP desactivado. No se leyó ninguna contraseña ni se inspeccionó su contenido. Después de esta configuración se probaron las invitaciones autorizadas: Gmail rechazó la autenticación con 535; no existe una invitación registrada para la cuenta. El aviso visible de Supabase sobre la entrega de correo personal con Gmail se conserva como limitación.
 
 Se guardaron las plantillas de invitación y recuperación en Supabase, con la marca, instrucciones en español e inglés y un solo enlace HTTPS a `/auth/callback`, usando el hash de un solo uso y el tipo correspondiente. La comprobación local del HTML confirmó el dominio y la ruta exactos, ambos tipos y la ausencia de una redirección externa. Las vistas previas muestran los enlaces de hash correctos; una página nueva de recuperación confirmó que el contenido persiste sin el enlace predeterminado anterior. No hay tokens reales ni direcciones privadas en esos archivos. No se enviaron correos al preparar las plantillas.
+
+## Asignación manual preparada · 26 de octubre de 2026
+
+- Auth Logs confirmó `535 5.7.8 Username and Password not accepted` tras los intentos de invitación. La cuenta sigue sin invitación registrada ni confirmación; se conserva el mismo UID y su permiso de administradora. No se borró ni recreó el usuario.
+- Se añadió `scripts/configure-admin-access.mjs`: herramienta local de Node.js 24, sin dependencias externas, para que el operador autorizado asigne una contraseña y confirme administrativamente esa cuenta mediante la API oficial. No hay un endpoint nuevo ni cambios en la autenticación del sitio.
+- Seis pruebas con respuestas simuladas completadas: identidad y rol existentes; negativa a modificar otra cuenta o un usuario sin permiso; confirmación explícita; coincidencia y límites de contraseña; rechazo de claves publicables; errores sin secretos ni reintentos de escritura.
+- Prueba interactiva completa en una terminal con credenciales sintéticas y red sustituida por respuestas simuladas: la clave secreta y los dos campos de contraseña no aparecen en la salida; se conserva el UID y se verifica el estado final simulado. Ninguna petición llegó a Supabase en esa prueba.
+- La operación real queda a cargo del operador en su equipo privado. No se ha leído ni elegido la nueva contraseña, ejecutado la actualización real ni comprobado el acceso autenticado del panel.
+
+El procedimiento y los límites se documentan en [ADMIN_ACCESS_SETUP.md](ADMIN_ACCESS_SETUP.md). La recuperación por correo sigue pendiente de corregir el SMTP, aunque la cuenta se active manualmente.
