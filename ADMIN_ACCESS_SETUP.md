@@ -16,7 +16,7 @@ Requiere Node.js 24 y una terminal interactiva. El archivo es independiente: no 
 
    Si trabajas desde la raíz del repositorio, usa `node scripts/configure-admin-access.mjs`.
 
-2. Introduce el UID y el correo de la cuenta ya registrada en **Supabase → Authentication → Users**. El script consulta exclusivamente ese UID y comprueba que coincide con el correo y que ya tiene permiso de administradora.
+2. Comprueba que la cabecera diga **(v2)**. Cada pregunta aparece en su propia línea, seguida de `> `; esto evita que PowerShell borre visualmente la pregunta al preparar la entrada. Introduce el UID y el correo de la cuenta ya registrada en **Supabase → Authentication → Users**. El script consulta exclusivamente ese UID y comprueba que coincide con el correo y que ya tiene permiso de administradora.
 3. Copia una **Secret key** del mismo proyecto desde **Project Settings → API Keys** y pégala **solo en el aviso oculto de esta terminal privada**. Usa una clave que comience por `sb_secret_`. No sirve una clave publicable ni una contraseña de Google. No modificar archivos de entorno ni pasar secretos como argumentos.
 4. Revisa el correo de la cuenta que muestra la terminal. Si cuentas con la autorización de su titular para configurar su acceso, escribe `ACTIVAR`. Esta confirmación es administrativa; no acredita que se haya abierto un mensaje en el buzón de la titular.
 5. Escribe la nueva contraseña del panel dos veces. Ambos campos están ocultos. Usa al menos 12 caracteres y un máximo de 72 bytes; una contraseña con caracteres ASCII simplifica este límite.

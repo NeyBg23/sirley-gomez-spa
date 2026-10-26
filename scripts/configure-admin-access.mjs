@@ -73,12 +73,13 @@ export async function configureAdminAccess(options) {
 }
 
 async function ask(label, secret = false) {
-  stdout.write(label);
+  stdout.write(`${label.trimEnd()}\n`);
   const sink = secret ? new Writable({ write(_chunk, _encoding, callback) { callback(); } }) : stdout;
   const reader = createInterface({ input: stdin, output: sink, terminal: true, historySize: 0 });
   const controller = new AbortController();
   reader.once('SIGINT', () => controller.abort());
-  try { return await reader.question('', { signal: controller.signal }); }
+  if (secret) stdout.write('> ');
+  try { return await reader.question(secret ? '' : '> ', { signal: controller.signal }); }
   catch { throw new SetupError('Operación cancelada.'); }
   finally { reader.close(); if (secret) stdout.write('\n'); }
 }
@@ -91,7 +92,7 @@ async function main() {
   if (Number(process.versions.node.split('.')[0]) < 24 || !stdin.isTTY || !stdout.isTTY) {
     throw new SetupError('Ejecuta el archivo en una terminal interactiva privada con Node.js 24.');
   }
-  stdout.write(`Configurar acceso de una administradora existente\nProyecto: ${projectUrl}\n`);
+  stdout.write(`Configurar acceso de una administradora existente (v2)\nProyecto: ${projectUrl}\n`);
   const userId = (await ask('UID de la cuenta (Authentication > Users): ')).trim().toLowerCase();
   const email = (await ask('Correo de esa cuenta: ')).trim().toLowerCase();
   validateTarget(userId, email);
