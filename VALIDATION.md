@@ -1,4 +1,4 @@
-# Validación · 25 de octubre de 2026
+# Validación · 26 de octubre de 2026
 
 ## Compilación y comprobaciones locales
 
@@ -33,14 +33,14 @@ Las solicitudes artificiales se identifican como QA y se eliminan tras las compr
 
 En la verificación inicial, antes de crear la cuenta, el asesor de seguridad no encontró advertencias ni errores. Informó cuatro tablas con [RLS sin políticas](https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy): es intencional, ya que todos los permisos directos de cliente están revocados y el acceso se hace en la API. El asesor de rendimiento informó un [índice aún sin uso](https://supabase.com/docs/guides/database/database-linter?lint=0005_unused_index), esperado en una agenda recién creada; se conserva para consultas de agenda.
 
-La cuenta administradora se creó el 25 de octubre de 2026 y se vinculó al panel; está pendiente de confirmar su correo y elegir su contraseña personal. Aún no se han verificado el inicio y renovación de sesión con la titular, las operaciones del panel, la carga de fotos ni la emisión y uso de tarjetas. Esas pruebas requieren completar la configuración de retorno y entrega de correo en Supabase Auth y la activación personal. El dashboard de Supabase requiere iniciar sesión en el navegador para realizar esos ajustes; el conector disponible no los expone.
+La cuenta administradora se creó el 25 de octubre de 2026 y se vinculó al panel; está pendiente de confirmar su correo y elegir su contraseña personal. Aún no se han verificado el inicio y renovación de sesión con la titular, las operaciones del panel, la carga de fotos ni la emisión y uso de tarjetas. Las URL de retorno se configuraron el 26 de octubre; faltan el remitente de correo y la activación personal. La configuración de URL y SMTP se revisó en el dashboard, ya que el conector disponible no expone esos ajustes.
 
 ## Preparación de la cuenta · 25 de octubre de 2026
 
 - Cuenta creada mediante la API administrativa de Supabase Auth y vinculada por su identificador real a `admins`. No se han enviado correos ni elegido la contraseña personal de su titular.
 - La API ahora exige `email_confirmed_at` además del usuario validado y la asignación de administrador. Las cuentas pendientes de confirmación siguen bloqueadas.
 - El control de aprovisionamiento rechazó una credencial de control inválida. Se retiró tras crear la cuenta; su ruta devuelve HTTP 410 y no conserva operaciones de creación. El archivo de control temporal se eliminó.
-- Se prepararon las páginas de activación y contraseña, con retorno PKCE y comprobación de rol. El cambio de contraseña requiere una sesión confirmada y autorizada. La comprobación de entrega del correo y la activación por su titular quedan pendientes del dominio y del remitente definitivo.
+- Se prepararon las páginas de activación y contraseña, con retorno PKCE y comprobación de rol. El cambio de contraseña requiere una sesión confirmada y autorizada. La comprobación de entrega del correo y la activación por su titular quedan pendientes del remitente definitivo.
 
 El asesor de seguridad posterior a la creación de la cuenta informa que está desactivada la [protección contra contraseñas filtradas](https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection). Supabase ofrece esa opción en Pro o superior; no se ha activado un plan de pago. El formulario exige una contraseña personal de al menos 12 caracteres y el servidor mantiene el bloqueo de cuentas sin confirmar.
 
@@ -71,3 +71,12 @@ La primera compilación desde ZIP se corrigió para incluir el adaptador de Next
 - Comprobación visual en navegador de la página de producción en español: logo, fotografías, tipografía, colores cálidos, precios, horarios y enlaces visibles. La página inglesa también se comprobó en navegador, incluida la actualización del idioma del documento a `en` tras la carga. La entrega de correo y las operaciones autenticadas del panel siguen pendientes.
 
 Tras añadir el adaptador, TypeScript volvió a pasar. Los cambios posteriores a esta publicación solo actualizan documentación.
+
+## Configuración de acceso · 26 de octubre de 2026
+
+- Acceso al dashboard verificado con la sesión del navegador conectado, en el proyecto y la organización correctos, ambos en Free.
+- Site URL guardada: `https://sirley-gomez-spa.netlify.app`, sustituyendo la dirección local inicial.
+- Única redirección permitida: `https://sirley-gomez-spa.netlify.app/auth/callback`, sin comodines. Ambos valores se comprobaron al volver a abrir la página de configuración.
+- SMTP personalizado desactivado. La cuenta administradora no está entre los miembros del equipo de Supabase, por lo que el servicio predeterminado no permite entregarle el correo de activación. Se requiere elegir y configurar un remitente SMTP; no se ampliaron los permisos de la organización.
+- Consulta de verificación: la cuenta del panel existe y conserva su asignación de administrador; correo aún sin confirmar y sin inicios de sesión previos.
+- No se enviaron mensajes, no se eligió una contraseña para la titular y no se contrataron servicios de pago.

@@ -17,9 +17,10 @@ La función usa las claves del entorno de Supabase, con preferencia por `SUPABAS
 
 La cuenta solicitada fue creada el 25 de octubre de 2026 y vinculada a `public.admins`. El correo se conserva en Supabase y no se publica en este repositorio. Sigue pendiente que su titular confirme el correo y configure su contraseña personal. No se ha enviado un correo de activación.
 
-1. En Supabase Auth, establecer `https://sirley-gomez-spa.netlify.app` como Site URL y permitir exactamente `https://sirley-gomez-spa.netlify.app/auth/callback` como redirección. Este ajuste y la revisión del remitente SMTP siguen pendientes de acceso al dashboard. Verificar que el remitente pueda entregar mensajes a la cuenta del spa.
-2. La titular abre `/admin/access`, solicita su enlace y lo sigue en el mismo navegador. La ruta de retorno valida la sesión y la autorización antes de mostrar `/admin/password`, donde elige su contraseña de forma privada.
-3. Probar inicio de sesión, cierre de sesión, recuperación y renovación de sesión desde `/admin`. El acceso administrativo siempre exige un correo confirmado.
+1. Configurado y comprobado el 26 de octubre de 2026: Site URL `https://sirley-gomez-spa.netlify.app` y una única redirección permitida, `https://sirley-gomez-spa.netlify.app/auth/callback`. Ambos valores persisten al volver a cargar la configuración.
+2. Pendiente: configurar un remitente SMTP autorizado. El SMTP personalizado está desactivado; el servicio predeterminado solo entrega a miembros del equipo de Supabase y la cuenta administradora del spa no pertenece a ese equipo. La elección del proveedor depende del dominio y del correo disponibles. Las credenciales se introducen directamente en Supabase y nunca se guardan en Git.
+3. Tras verificar el remitente y autorizar el envío, la titular abre `/admin/access`, solicita su enlace y lo sigue en el mismo navegador. La ruta de retorno valida la sesión y la autorización antes de mostrar `/admin/password`, donde elige su contraseña de forma privada.
+4. Probar inicio de sesión, cierre de sesión, recuperación y renovación de sesión desde `/admin`. El acceso administrativo siempre exige un correo confirmado.
 
 El aprovisionamiento se hizo con la API administrativa de Auth, sin modificar directamente `auth.users`; el mecanismo temporal fue retirado al terminar. No existe alta pública de administradores ni un permiso automático para la primera persona que inicie sesión. Una cuenta autenticada sin registro en `admins` recibe acceso denegado.
 
@@ -41,7 +42,7 @@ Variables de producción:
 | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Clave publicable activa de ese proyecto |
 | `NEXT_PUBLIC_SITE_URL` | Origen final de la web, con HTTPS |
 
-Estas tres variables están guardadas en el proyecto de Netlify para el contexto de producción y se verificaron mediante lectura posterior. Se usan todos los ámbitos predeterminados del plan Free; la selección de ámbitos individuales requiere Pro. Son configuración pública. No incluir claves de servicio de Supabase en Netlify ni en el repositorio. En Supabase Auth se debe establecer el origen definitivo y autorizar exactamente `/auth/callback` como retorno. Verificar la entrega del correo antes de activar la cuenta administradora.
+Estas tres variables están guardadas en el proyecto de Netlify para el contexto de producción y se verificaron mediante lectura posterior. Se usan todos los ámbitos predeterminados del plan Free; la selección de ámbitos individuales requiere Pro. Son configuración pública. No incluir claves de servicio de Supabase en Netlify ni en el repositorio. El origen definitivo y su retorno exacto ya están configurados en Supabase Auth. Verificar la entrega del correo antes de activar la cuenta administradora.
 
 Para pruebas de ramas, usar un Supabase separado y variables de Preview propias, evitando escrituras en la agenda de producción. La versión anterior alojada en Sites conserva su configuración independiente.
 
