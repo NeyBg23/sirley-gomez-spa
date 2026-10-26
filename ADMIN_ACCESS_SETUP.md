@@ -1,6 +1,8 @@
 # Asignar una contraseña al acceso existente
 
-El 26 de octubre de 2026 se probaron las invitaciones autorizadas. Gmail rechazó la autenticación SMTP con `535 5.7.8 Username and Password not accepted`. El aviso de guardado del dashboard no comprueba que el proveedor acepte la credencial. La cuenta administradora sigue creada y vinculada; el envío y la activación no se han completado.
+**Estado actual: cuenta activada y acceso al panel comprobado el 26 de octubre de 2026.** El operador completó la versión 2 de la herramienta en su terminal privada e inició sesión. Supabase confirmó que la cuenta conserva su identidad y permiso y que está confirmada; el navegador conectado mostró el panel autenticado. Para entrar se usa <https://sirley-gomez-spa.netlify.app/admin>; este procedimiento se conserva para mantenimiento autorizado.
+
+Ese día también se probaron las invitaciones autorizadas. Gmail rechazó la autenticación SMTP con `535 5.7.8 Username and Password not accepted`. El aviso de guardado del dashboard no comprueba que el proveedor acepte la credencial. El envío y la recuperación por correo siguen pendientes de corregir el SMTP.
 
 Como alternativa, la API administrativa oficial permite asignar una contraseña y confirmar administrativamente **esa cuenta concreta**. El script `scripts/configure-admin-access.mjs` prepara esa operación. No crea usuarios, no elimina la cuenta pendiente, no cambia su correo, no concede roles y no desactiva la confirmación del resto de cuentas. El inicio de sesión del panel sigue comprobando correo confirmado y pertenencia a `admins`.
 
@@ -21,7 +23,7 @@ Requiere Node.js 24 y una terminal interactiva. El archivo es independiente: no 
 4. Revisa el correo de la cuenta que muestra la terminal. Si cuentas con la autorización de su titular para configurar su acceso, escribe `ACTIVAR`. Esta confirmación es administrativa; no acredita que se haya abierto un mensaje en el buzón de la titular.
 5. Escribe la nueva contraseña del panel dos veces. Ambos campos están ocultos. Usa al menos 12 caracteres y un máximo de 72 bytes; una contraseña con caracteres ASCII simplifica este límite.
 6. El script envía una única actualización a Supabase Auth con la contraseña y `email_confirm: true`. Después verifica que se mantienen UID, correo y permiso de administradora y que la cuenta aparece confirmada. Si hay un fallo de red, comprueba el estado antes de repetir; el script no reintenta escrituras automáticamente.
-7. Cuando aparezca **Acceso configurado**, abre <https://sirley-gomez-spa.netlify.app/admin> e inicia sesión con el correo y la contraseña elegida. Esa prueba de navegador sigue pendiente hasta que la realice quien configure el acceso. La contraseña se entrega a su titular por un canal privado.
+7. Cuando aparezca **Acceso configurado**, abre <https://sirley-gomez-spa.netlify.app/admin> e inicia sesión con el correo y la contraseña elegida. Esa prueba ya se completó para la primera activación. La contraseña se entrega a su titular por un canal privado.
 
 La clave secreta y la contraseña no se imprimen, no se guardan en archivos y no forman parte del repositorio. Se mantienen en memoria del proceso durante la operación; al terminar, cierra la terminal. Las peticiones solo pueden ir al origen HTTPS fijo de este proyecto, rechazan redirecciones y no muestran cuerpos de error del proveedor. La operación no despliega un endpoint administrativo nuevo.
 
@@ -34,6 +36,6 @@ node --test scripts/configure-admin-access.test.mjs
 node scripts/configure-admin-access.mjs --help
 ```
 
-Las pruebas usan respuestas simuladas sin peticiones de red. Cubren la conservación de la identidad, la confirmación específica, la negativa a modificar otras cuentas o usuarios sin el rol, la confirmación del operador, límites y repetición de contraseña, rechazo de claves publicables y errores sin claves ni contraseñas. No se ha ejecutado la actualización sobre la cuenta real ni se ha elegido una contraseña para su titular.
+Las pruebas automatizadas usan respuestas simuladas sin peticiones de red. Cubren la conservación de la identidad, la confirmación específica, la negativa a modificar otras cuentas o usuarios sin el rol, la confirmación del operador, límites y repetición de contraseña, rechazo de claves publicables y errores sin claves ni contraseñas. Después, el operador realizó la actualización real con la contraseña elegida de forma privada; Supabase confirmó la activación, el rol conservado y el inicio de sesión. El asistente no leyó ni eligió la contraseña ni la clave secreta.
 
 Referencias: [actualizar una cuenta con la API administrativa](https://supabase.com/docs/reference/javascript/auth-admin-updateuserbyid), [claves de Supabase](https://supabase.com/docs/guides/getting-started/api-keys), [SMTP](https://supabase.com/docs/guides/auth/auth-smtp).
